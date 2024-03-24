@@ -1,4 +1,5 @@
-# E-commerce Store AI Assistant
+# E-commerce AI Assistant
+An e-commerce AI assistant built with [Langchain.rb](https://github.com/andreibondarev/langchainrb) and OpenAI.
 Video tutorial: https://www.loom.com/share/83aa4fd8dccb492aad4ca95da40ed0b2
 
 ### Installation
