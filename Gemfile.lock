@@ -21,6 +21,8 @@ GEM
     colorize (1.1.0)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
+    date (3.3.4)
+    dotenv (3.1.0)
     drb (2.2.1)
     event_stream_parser (1.0.0)
     faraday (2.9.0)
@@ -44,15 +46,30 @@ GEM
       tiktoken_ruby (~> 0.0.7)
       to_bool (~> 2.0.0)
       zeitwerk (~> 2.5)
+    mail (2.8.1)
+      mini_mime (>= 0.1.1)
+      net-imap
+      net-pop
+      net-smtp
     mainstreet (0.3.0)
       geocoder (>= 1.5.1)
     matrix (0.4.2)
     method_source (1.0.0)
+    mini_mime (1.1.5)
     minitest (5.22.3)
     multipart-post (2.4.0)
     mutex_m (0.2.0)
     net-http (0.4.1)
       uri
+    net-imap (0.4.10)
+      date
+      net-protocol
+    net-pop (0.1.2)
+      net-protocol
+    net-protocol (0.2.2)
+      timeout
+    net-smtp (0.5.0)
+      net-protocol
     pragmatic_segmenter (0.3.23)
       unicode
     pry (0.14.2)
@@ -66,12 +83,20 @@ GEM
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
       faraday-multipart (>= 1)
+    sequel (5.79.0)
+      bigdecimal
+    sqlite3 (1.7.3-aarch64-linux)
+    sqlite3 (1.7.3-arm-linux)
+    sqlite3 (1.7.3-arm64-darwin)
+    sqlite3 (1.7.3-x86_64-darwin)
+    sqlite3 (1.7.3-x86_64-linux)
     tiktoken_ruby (0.0.7-aarch64-linux)
     tiktoken_ruby (0.0.7-arm-linux)
     tiktoken_ruby (0.0.7-arm64-darwin)
     tiktoken_ruby (0.0.7-x86_64-darwin)
     tiktoken_ruby (0.0.7-x86_64-linux)
     tiktoken_ruby (0.0.7-x86_64-linux-musl)
+    timeout (0.4.1)
     to_bool (2.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -88,10 +113,14 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  dotenv
   langchainrb
+  mail
   mainstreet
   pry-byebug
   ruby-openai
+  sequel
+  sqlite3
 
 BUNDLED WITH
    2.5.3

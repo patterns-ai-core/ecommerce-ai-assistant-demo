@@ -1,0 +1,54 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "order_management-create_order",
+      "description": "Order Management Service: Create a new order",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "number",
+            "description": "Customer ID"
+          },
+          "order_items": {
+            "type": "array",
+            "description": "List of order items that each contain 'sku' and 'quantity' properties",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_sku": {
+                  "type": "number",
+                  "description": "Product SKU"
+                },
+                "quantity": {
+                  "type": "number",
+                  "description": "Quantity of the product"
+                }
+              },
+              "required": ["sku", "quantity"]
+            }
+          }
+        },
+        "required": ["customer_id", "order_items"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "order_management-mark_as_refunded",
+      "description": "Inventory Management Service: Mark order as refunded",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Order ID"
+          }
+        },
+        "required": ["sku", "quantity"]
+      }
+    }
+  }
+]

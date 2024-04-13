@@ -24,9 +24,9 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "customer_name": {
+          "customer_id": {
             "type": "string",
-            "description": "Customer's full name"
+            "description": "Customer ID"
           },
           "address": {
             "type": "string",
@@ -37,7 +37,7 @@
             "enum": ["usps", "ups", "fedex", "dhl"]
           }
         },
-        "required": ["customer_name", "address", "provider"]
+        "required": ["customer_id", "address", "provider"]
       }
     }
   },
@@ -49,9 +49,9 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "customer_name": {
+          "customer_id": {
             "type": "string",
-            "description": "Customer's full name"
+            "description": "Customer ID"
           },
           "address": {
             "type": "string",
@@ -62,7 +62,7 @@
             "enum": ["usps", "ups", "fedex", "dhl"]
           }
         },
-        "required": ["customer_name", "address", "provider"]
+        "required": ["customer_id", "address", "provider"]
       }
     }
   }

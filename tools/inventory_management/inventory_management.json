@@ -2,27 +2,6 @@
   {
     "type": "function",
     "function": {
-      "name": "inventory_management-check_inventory",
-      "description": "Inventory Management Service: Check inventory if specific product is available in requested quantity",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "sku": {
-            "type": "string",
-            "description": "Product SKU number"
-          },
-          "quantity": {
-            "type": "number",
-            "description": "Requested quantity"
-          }
-        },
-        "required": ["sku", "quantity"]
-      }
-    }
-  },
-  {
-    "type": "function",
-    "function": {
       "name": "inventory_management-update_inventory",
       "description": "Inventory Management Service: Update inventory with new quantity for specific product",
       "parameters": {
@@ -40,6 +19,22 @@
         "required": ["sku", "quantity"]
       }
     }
-  }
-
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "inventory_management-find_product",
+      "description": "Inventory Management Service: Look up a product by SKU",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sku": {
+            "type": "string",
+            "description": "Product SKU number"
+          }
+        },
+        "required": ["sku"]
+      }
+    }
+  } 
 ]

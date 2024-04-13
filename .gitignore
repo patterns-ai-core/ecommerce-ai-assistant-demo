@@ -11,7 +11,10 @@
 /tmp/
 
 # Used by dotenv library to load environment variables.
-# .env
+.env
+
+# Ignore the sqlite database.
+*.db
 
 # Ignore Byebug command history file.
 .byebug_history

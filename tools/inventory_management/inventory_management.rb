@@ -5,25 +5,25 @@ module Langchain::Tool
     NAME = "inventory_management"
     ANNOTATIONS_PATH = Pathname.new("#{__dir__}/inventory_management.json").to_path
 
-    attr_accessor :inventory
-
     def initialize
-      @inventory = {
-        "A3045809" => 10,
-        "B9384509" => 5,
-        "Z0394853" => 2,
-        "X3048509" => 3,
-        "Y3048509" => 1,
-        "L3048509" => 0
-      }
-    end
-
-    def check_inventory(sku:, quantity:)
-      @inventory.fetch(sku, 0) >= quantity
     end
 
     def update_inventory(sku:, quantity:)
-      @inventory[sku] = quantity
+      Langchain.logger.info("[ 📋 ] Updating Inventory for #{sku} with #{quantity} unit(s)", for: self.class)
+
+      product = Product.find(sku: sku)
+      product.quantity = quantity
+      product.save
+    end
+
+    def find_product(sku:)
+      Langchain.logger.info("[ 📋 ] Looking up Product SKU: #{sku}", for: self.class)
+
+      product = Product.find(sku: sku)
+
+      return "Product not found" if product.nil?
+
+      product.to_hash
     end
   end
 end

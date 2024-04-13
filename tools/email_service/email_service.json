@@ -1,0 +1,23 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "email_service-send_email",
+      "description": "Email Service: Sends emails",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "number",
+            "description": "Customer ID"
+          },
+          "order_id": {
+            "type": "number",
+            "description": "Order ID"
+          }
+        },
+        "required": ["customer_id", "order_id"]
+      }
+    }
+  }
+]

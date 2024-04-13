@@ -40,5 +40,27 @@
         "required": ["customer_id", "amount"]
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "payment_gateway-issue_store_credit",
+      "description": "Payment Gateway Service: Issue store credit",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer ID"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount (USD) to issue as store credit for"
+          }
+        },
+        "required": ["customer_id", "amount"]
+      }
+    }
   }
+
 ]
