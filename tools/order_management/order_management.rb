@@ -15,6 +15,8 @@ module Langchain::Tool
 
       order = Order.create(customer_id: customer_id, created_at: Time.now)
 
+      return "Order not found" if order.nil?
+
       order_items.each do |item|
         OrderItem.create(order_id: order.id, product_sku: item[:product_sku], quantity: item[:quantity])
       end

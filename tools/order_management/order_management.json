@@ -18,7 +18,7 @@
               "type": "object",
               "properties": {
                 "product_sku": {
-                  "type": "number",
+                  "type": "string",
                   "description": "Product SKU"
                 },
                 "quantity": {
