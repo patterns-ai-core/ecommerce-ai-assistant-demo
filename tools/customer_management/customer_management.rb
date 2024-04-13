@@ -23,7 +23,7 @@ module Langchain::Tool
 
       return "Customer not found" if customer.nil?
 
-      { success: true, customer_id: customer.id }
+      customer.to_hash
     end
   end
 end

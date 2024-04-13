@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "langchainrb"
+gem "langchainrb", "~> 0.11.2"
 gem "mainstreet"
 gem "ruby-openai"
 gem "pry-byebug"

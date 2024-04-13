@@ -47,7 +47,24 @@
             "description": "Order ID"
           }
         },
-        "required": ["sku", "quantity"]
+        "required": ["order_id"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "order_management-find_order",
+      "description": "Inventory Management Service: Find order by ID",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Order ID"
+          }
+        },
+        "required": ["order_id"]
       }
     }
   }

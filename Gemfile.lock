@@ -34,16 +34,16 @@ GEM
     geocoder (1.8.2)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
-    json-schema (4.2.0)
+    json-schema (4.3.0)
       addressable (>= 2.8)
-    langchainrb (0.10.2)
+    langchainrb (0.11.2)
       activesupport (>= 7.0.8)
       baran (~> 0.1.9)
       colorize (~> 1.1.0)
       json-schema (~> 4)
       matrix
       pragmatic_segmenter (~> 0.3.0)
-      tiktoken_ruby (~> 0.0.7)
+      tiktoken_ruby (~> 0.0.8)
       to_bool (~> 2.0.0)
       zeitwerk (~> 2.5)
     mail (2.8.1)
@@ -78,7 +78,7 @@ GEM
     pry-byebug (3.10.1)
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
-    public_suffix (5.0.4)
+    public_suffix (5.0.5)
     ruby-openai (6.3.1)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
@@ -90,12 +90,12 @@ GEM
     sqlite3 (1.7.3-arm64-darwin)
     sqlite3 (1.7.3-x86_64-darwin)
     sqlite3 (1.7.3-x86_64-linux)
-    tiktoken_ruby (0.0.7-aarch64-linux)
-    tiktoken_ruby (0.0.7-arm-linux)
-    tiktoken_ruby (0.0.7-arm64-darwin)
-    tiktoken_ruby (0.0.7-x86_64-darwin)
-    tiktoken_ruby (0.0.7-x86_64-linux)
-    tiktoken_ruby (0.0.7-x86_64-linux-musl)
+    tiktoken_ruby (0.0.8-aarch64-linux)
+    tiktoken_ruby (0.0.8-arm-linux)
+    tiktoken_ruby (0.0.8-arm64-darwin)
+    tiktoken_ruby (0.0.8-x86_64-darwin)
+    tiktoken_ruby (0.0.8-x86_64-linux)
+    tiktoken_ruby (0.0.8-x86_64-linux-musl)
     timeout (0.4.1)
     to_bool (2.0.0)
     tzinfo (2.0.6)
@@ -114,7 +114,7 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv
-  langchainrb
+  langchainrb (~> 0.11.2)
   mail
   mainstreet
   pry-byebug

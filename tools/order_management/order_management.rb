@@ -41,7 +41,11 @@ module Langchain::Tool
 
       return "Order not found" if order.nil?
 
-      order.to_hash
+      order
+        .to_hash
+        .merge(
+          order_items: order.order_items.map(&:to_hash)
+        )
     end
   end
 end
