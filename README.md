@@ -28,7 +28,7 @@ llm = Langchain::LLM::OpenAI.new(
 )
 
 # INSTRUCTIONS 1
-instructions_1 = <<~INSTRUCTIONS
+new_order_instructions = <<~INSTRUCTIONS
   You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
 
   You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for processing orders.
@@ -46,7 +46,7 @@ instructions_1 = <<~INSTRUCTIONS
 INSTRUCTIONS
 
 # INSTRUCTIONS 2
-instructions_2 = <<~INSTRUCTIONS
+return_order_instructions = <<~INSTRUCTIONS
   You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
 
   You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for handling returns.
@@ -63,7 +63,7 @@ INSTRUCTIONS
 # Create the assistant
 assistant = Langchain::Assistant.new(
   # Instructions for the assistant that will be passed to OpenAI as a "system" message
-  instructions: instructions_1,
+  instructions: new_order_instructions,
   llm: llm,
   tools: [
     Langchain::Tool::InventoryManagement.new,
@@ -85,7 +85,7 @@ assistant.add_message_and_run content: "Andrei Bondarev (andrei@sourcelabs.io) j
 # Clear the thread
 assistant.clear_thread!
 # Reset the instructions
-assistant.instructions = instructions_1
+assistant.instructions = new_order_instructions
 
 # Submit another order:
 assistant.add_message_and_run content: """
@@ -98,7 +98,7 @@ Items: B9384509 x 2, X3048509 x 1
 # Clear the thread
 assistant.clear_thread!
 # Set the new instructions
-assistant.instructions = instructions_2
+assistant.instructions = return_order_instructions
 
 # Process a return:
 assistant.add_message_and_run content: "stephen.margheim@gmail.com is returning order ID: 2", auto_tool_execution: true
@@ -106,7 +106,7 @@ assistant.add_message_and_run content: "stephen.margheim@gmail.com is returning 
 # Clear the thread
 assistant.clear_thread!
 # Set the new instructions
-assistant.instructions = instructions_2
+assistant.instructions = return_order_instructions
 
 # Updating inventory:
 assistant.add_message_and_run content: """
