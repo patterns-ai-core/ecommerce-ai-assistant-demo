@@ -1,7 +1,10 @@
 # E-commerce AI Assistant
-An e-commerce AI assistant built with [Langchain.rb](https://github.com/andreibondarev/langchainrb) and OpenAI.
+An e-commerce AI assistant built with [Langchain.rb](https://github.com/andreibondarev/langchainrb) and OpenAI. This demo articulates the idea that business logic will now also live in prompts. A lot of modern software development is stringing services (classes and APIs) together. This demo illustrate how AI can assist in executing business logic and orchestrating calls to various services.
 
 Video tutorial: https://www.loom.com/share/83aa4fd8dccb492aad4ca95da40ed0b2
+
+### Diagram
+<img src="https://github.com/patterns-ai-core/ecommerce-ai-assistant-demo/assets/541665/e17032a5-336d-44e7-b070-3695e69003f6" height="400" />
 
 ### Installation
 1. `git clone`
