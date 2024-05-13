@@ -27,7 +27,7 @@ module Langchain::Tool
     def create_return_label(customer_id:, address:, provider:)
       Langchain.logger.info("[ 🚚 ] Creating return shipping label for customer ID: #{customer_id}", for: self.class)
 
-      validate_address(address)
+      validate_address(address: address)
 
       return "Invalid provider" unless ["ups", "fedex", "usps", "dhl"].include?(provider)
 
