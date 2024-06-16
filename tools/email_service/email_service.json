@@ -2,7 +2,7 @@
   {
     "type": "function",
     "function": {
-      "name": "email_service-send_email",
+      "name": "email_service__send_email",
       "description": "Email Service: Sends emails",
       "parameters": {
         "type": "object",

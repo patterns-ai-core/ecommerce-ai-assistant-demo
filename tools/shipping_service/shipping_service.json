@@ -2,7 +2,7 @@
   {
     "type": "function",
     "function": {
-      "name": "shipping_service-validate_address",
+      "name": "shipping_service__validate_address",
       "description": "Shipping Service: Validate a given address",
       "parameters": {
         "type": "object",
@@ -19,7 +19,7 @@
   {
     "type": "function",
     "function": {
-      "name": "shipping_service-create_shipping_label",
+      "name": "shipping_service__create_shipping_label",
       "description": "Shipping Service: Create a shipping label for a given customer name, address and shipping provider",
       "parameters": {
         "type": "object",
@@ -44,7 +44,7 @@
   {
     "type": "function",
     "function": {
-      "name": "shipping_service-create_return_label",
+      "name": "shipping_service__create_return_label",
       "description": "Shipping Service: Create a return label from a given customer name, address and shipping provider",
       "parameters": {
         "type": "object",

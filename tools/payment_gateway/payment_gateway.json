@@ -2,7 +2,7 @@
   {
     "type": "function",
     "function": {
-      "name": "payment_gateway-charge_customer",
+      "name": "payment_gateway__charge_customer",
       "description": "Payment Gateway Service: Charge customer for a specific amount",
       "parameters": {
         "type": "object",
@@ -23,7 +23,7 @@
   {
     "type": "function",
     "function": {
-      "name": "payment_gateway-refund_customer",
+      "name": "payment_gateway__refund_customer",
       "description": "Payment Gateway Service: Refund customer for a specific amount",
       "parameters": {
         "type": "object",
@@ -44,7 +44,7 @@
   {
     "type": "function",
     "function": {
-      "name": "payment_gateway-issue_store_credit",
+      "name": "payment_gateway__issue_store_credit",
       "description": "Payment Gateway Service: Issue store credit",
       "parameters": {
         "type": "object",

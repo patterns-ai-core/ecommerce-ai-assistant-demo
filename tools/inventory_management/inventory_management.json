@@ -2,7 +2,7 @@
   {
     "type": "function",
     "function": {
-      "name": "inventory_management-update_inventory",
+      "name": "inventory_management__update_inventory",
       "description": "Inventory Management Service: Update inventory with new quantity for specific product",
       "parameters": {
         "type": "object",
@@ -23,7 +23,7 @@
   {
     "type": "function",
     "function": {
-      "name": "inventory_management-find_product",
+      "name": "inventory_management__find_product",
       "description": "Inventory Management Service: Look up a product by SKU",
       "parameters": {
         "type": "object",

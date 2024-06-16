@@ -2,7 +2,7 @@
   {
     "type": "function",
     "function": {
-      "name": "customer_management-create_customer",
+      "name": "customer_management__create_customer",
       "description": "Customer Management Service: Create a new customer with a given name",
       "parameters": {
         "type": "object",
@@ -23,7 +23,7 @@
   {
     "type": "function",
     "function": {
-      "name": "customer_management-find_customer",
+      "name": "customer_management__find_customer",
       "description": "Customer Management Service: Look up a customer by email",
       "parameters": {
         "type": "object",

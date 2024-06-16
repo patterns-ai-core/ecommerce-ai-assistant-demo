@@ -27,7 +27,7 @@ ruby main.rb
 ```ruby
 llm = Langchain::LLM::OpenAI.new(
   api_key: ENV["OPENAI_API_KEY"],
-  default_options: { chat_completion_model_name: "gpt-4-turbo" }
+  default_options: { chat_completion_model_name: "gpt-4o" }
 )
 
 # INSTRUCTIONS 1
@@ -44,7 +44,7 @@ new_order_instructions = <<~INSTRUCTIONS
   3. Calculate total amount
   4. Charge customer
   5. Create order
-  6. Create shipping label
+  6. Create shipping label. If the address is in Europe, use DHL. If the address is in US, use FedEx.
   7. Send an email notification to customer
 INSTRUCTIONS
 

@@ -2,7 +2,7 @@
   {
     "type": "function",
     "function": {
-      "name": "order_management-create_order",
+      "name": "order_management__create_order",
       "description": "Order Management Service: Create a new order",
       "parameters": {
         "type": "object",
@@ -37,7 +37,7 @@
   {
     "type": "function",
     "function": {
-      "name": "order_management-mark_as_refunded",
+      "name": "order_management__mark_as_refunded",
       "description": "Inventory Management Service: Mark order as refunded",
       "parameters": {
         "type": "object",
@@ -54,7 +54,7 @@
   {
     "type": "function",
     "function": {
-      "name": "order_management-find_order",
+      "name": "order_management__find_order",
       "description": "Inventory Management Service: Find order by ID",
       "parameters": {
         "type": "object",
