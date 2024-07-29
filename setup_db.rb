@@ -1,5 +1,6 @@
+require "bundler/setup"
+Bundler.require
 require "dotenv/load"
-require 'sequel'
 
 DB = Sequel.sqlite(ENV["DATABASE_NAME"])
 

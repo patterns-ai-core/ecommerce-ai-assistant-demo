@@ -69,15 +69,13 @@ assistant = Langchain::Assistant.new(
   instructions: new_order_instructions,
   llm: llm,
   tools: [
-    Langchain::Tool::InventoryManagement.new,
-    Langchain::Tool::ShippingService.new,
-    Langchain::Tool::PaymentGateway.new,
-    Langchain::Tool::OrderManagement.new,
-    Langchain::Tool::CustomerManagement.new,
-    Langchain::Tool::EmailService.new
-  ],
-  # Thread instance that will keep track and record Messages
-  thread: Langchain::Thread.new
+    InventoryManagement.new,
+    ShippingService.new,
+    PaymentGateway.new,
+    OrderManagement.new,
+    CustomerManagement.new,
+    EmailService.new
+  ]
 )
 
 # REQUESTS:
