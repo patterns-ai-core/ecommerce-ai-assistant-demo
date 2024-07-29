@@ -27,7 +27,7 @@ ruby main.rb
 ```ruby
 llm = Langchain::LLM::OpenAI.new(
   api_key: ENV["OPENAI_API_KEY"],
-  default_options: { chat_completion_model_name: "gpt-4o" }
+  default_options: { chat_completion_model_name: "gpt-4o-mini" }
 )
 
 # INSTRUCTIONS 1
