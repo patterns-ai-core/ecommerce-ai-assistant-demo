@@ -1,15 +1,14 @@
 GIT
   remote: https://github.com/patterns-ai-core/langchainrb.git
-  revision: ff699356068bd7d6bc768e5518f6b4fdcbdfc90f
+  revision: 860deef98cd659b96bedd8d0e0c8a569611dfc22
   branch: main
   specs:
-    langchainrb (0.14.0)
+    langchainrb (0.15.4)
       baran (~> 0.1.9)
-      colorize (~> 1.1.0)
       json-schema (~> 4)
       matrix
       pragmatic_segmenter (~> 0.3.0)
-      to_bool (~> 2.0.0)
+      rainbow (~> 3.1.0)
       zeitwerk (~> 2.5)
 
 GEM
@@ -25,7 +24,6 @@ GEM
     bigdecimal (3.1.8)
     byebug (11.1.3)
     coderay (1.1.3)
-    colorize (1.1.0)
     date (3.3.4)
     dotenv (3.1.2)
     event_stream_parser (1.0.0)
@@ -59,8 +57,7 @@ GEM
       timeout
     net-smtp (0.5.0)
       net-protocol
-    pragmatic_segmenter (0.3.23)
-      unicode
+    pragmatic_segmenter (0.3.24)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -68,6 +65,7 @@ GEM
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
     public_suffix (6.0.1)
+    rainbow (3.1.1)
     ruby-openai (7.1.0)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
@@ -85,10 +83,8 @@ GEM
     sqlite3 (2.0.2-x86_64-linux-gnu)
     sqlite3 (2.0.2-x86_64-linux-musl)
     timeout (0.4.1)
-    to_bool (2.0.0)
-    unicode (0.4.4.5)
     uri (0.13.0)
-    zeitwerk (2.6.16)
+    zeitwerk (2.6.18)
 
 PLATFORMS
   aarch64-linux-gnu
