@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Assistant Chat</title>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const eventSource = new EventSource('/stream');
+      const chatContainer = document.getElementById('chat-container');
+
+      eventSource.onmessage = function(event) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = event.data;
+        chatContainer.appendChild(messageElement);
+      };
+
+      eventSource.onerror = function(error) {
+        console.error('EventSource failed:', error);
+        eventSource.close();
+      };
+    });
+  </script>
+</head>
+<body>
+  <h1>AI Assistant Chat</h1>
+  <div id="chat-container"></div>
+</body>
+</html>

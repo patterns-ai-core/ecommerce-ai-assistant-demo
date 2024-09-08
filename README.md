@@ -75,7 +75,8 @@ assistant = Langchain::Assistant.new(
     OrderManagement.new,
     CustomerManagement.new,
     EmailService.new
-  ]
+  ],
+  callback: Proc.new { |message| message}
 )
 
 # REQUESTS:

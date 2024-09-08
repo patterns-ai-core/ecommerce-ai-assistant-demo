@@ -18,7 +18,7 @@ class ShippingService
   def create_shipping_label(customer_id:, address:, provider:)
     Langchain.logger.info("[ 🚚 ] Creating shipping label for customer ID: #{customer_id}", for: self.class)
 
-    return "Invalid provider" unless ["ups", "fedex", "usps", "dhl"].include?(provider)
+    return "Invalid shipping provider. Only USPS is supported." unless ["usps"].include?(provider)
 
     {success: true, tracking_number: SecureRandom.uuid, provider: provider}
   end

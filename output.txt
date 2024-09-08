@@ -1,0 +1,692 @@
+
+
+# File: setup_db.rb
+require "bundler/setup"
+Bundler.require
+require "dotenv/load"
+
+DB = Sequel.sqlite(ENV["DATABASE_NAME"])
+
+DB.create_table :products do
+  String :sku, primary_key: true
+  Float :price
+  Integer :quantity
+end
+
+DB.create_table :orders do
+  primary_key :id
+  Integer :customer_id
+  DateTime :created_at
+end
+
+DB.create_table :order_items do
+  primary_key :id
+  foreign_key :order_id, :orders, on_delete: :cascade
+  foreign_key :product_sku, :products, type: String, key: :sku
+  Integer :quantity
+end
+
+DB.create_table :customers do
+  primary_key :id
+  String :name
+  String :email
+end
+
+products = DB[:products]
+products.insert sku: 'A3045809', price: 20.99, quantity: 100
+products.insert sku: 'B9384509', price: 21.99, quantity: 5
+products.insert sku: 'Z0394853', price: 22.99, quantity: 20
+products.insert sku: 'X3048509', price: 23.99, quantity: 3
+products.insert sku: 'Y3048509', price: 24.99, quantity: 10
+products.insert sku: 'L3048509', price: 29.99, quantity: 0
+
+
+
+# File: LICENSE
+MIT License
+
+Copyright (c) 2024 Andrei Bondarev
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+# File: main.rb
+require "bundler/setup"
+Bundler.require
+require "dotenv/load"
+
+Mail.defaults do
+  delivery_method :sendmail
+end
+
+Sequel::Model.db = Sequel.sqlite(ENV["DATABASE_NAME"])
+
+# Require all the models
+require_relative "./models/product"
+require_relative "./models/order"
+require_relative "./models/order_item"
+require_relative "./models/customer"
+
+# Require all the tools
+require_relative "./tools/inventory_management"
+require_relative "./tools/payment_gateway"
+require_relative "./tools/shipping_service"
+require_relative "./tools/order_management"
+require_relative "./tools/customer_management"
+require_relative "./tools/email_service"
+
+require "irb"
+IRB.start(__FILE__)
+
+# File: config.ru
+require './app'
+run App
+
+
+# File: .tool-versions
+ruby 3.3.4
+
+
+# File: app.rb
+require "bundler/setup"
+Bundler.require
+require "dotenv/load"
+
+require 'sinatra'
+
+Mail.defaults do
+  delivery_method :sendmail
+end
+
+Sequel::Model.db = Sequel.sqlite(ENV["DATABASE_NAME"])
+
+require_relative "./models/product"
+require_relative "./models/order"
+require_relative "./models/order_item"
+require_relative "./models/customer"
+
+# Require all the tools
+require_relative "./tools/inventory_management"
+require_relative "./tools/payment_gateway"
+require_relative "./tools/shipping_service"
+require_relative "./tools/order_management"
+require_relative "./tools/customer_management"
+require_relative "./tools/email_service"
+
+require_relative './controllers/main_controller'
+
+class App < Sinatra::Base
+  set :root, File.dirname(__FILE__)
+  set :views, Proc.new { File.join(root, "views") }
+
+  use MainController
+
+  get '/' do
+    erb :index
+  end
+end
+
+
+# File: README.md
+# E-commerce AI Assistant
+An e-commerce AI assistant built with [Langchain.rb](https://github.com/andreibondarev/langchainrb) and OpenAI. This demo articulates the idea that business logic will now also live in prompts. A lot of modern software development is stringing services (classes and APIs) together. This demo illustrate how AI can assist in executing business logic and orchestrating calls to various services.
+
+Video tutorial: https://www.loom.com/share/83aa4fd8dccb492aad4ca95da40ed0b2
+
+### Diagram
+<img src="https://github.com/patterns-ai-core/ecommerce-ai-assistant-demo/assets/541665/e17032a5-336d-44e7-b070-3695e69003f6" height="400" />
+
+### Installation
+1. `git clone`
+2. `bundle install`
+3. `cp .env.example .env` and fill it out with your values.
+4. Run `sendmail` in a separate tab.
+
+### Running
+1. Run setup_db.rb to set up the database:
+```ruby
+ruby setup_db.rb
+```
+
+2. Load Ruby REPL session with everything loaded:
+```ruby
+ruby main.rb
+```
+
+3. Paste it the following code:
+```ruby
+llm = Langchain::LLM::OpenAI.new(
+  api_key: ENV["OPENAI_API_KEY"],
+  default_options: { chat_completion_model_name: "gpt-4o-mini" }
+)
+
+# INSTRUCTIONS 1
+new_order_instructions = <<~INSTRUCTIONS
+  You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
+
+  You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for processing orders.
+
+  FOLLOW THESE EXACT PROCEDURES BELOW:
+
+  New order step by step procedures:
+  1. Create customer account if it doesn't exist
+  2. Check inventory for items
+  3. Calculate total amount
+  4. Charge customer
+  5. Create order
+  6. Create shipping label. If the address is in Europe, use DHL. If the address is in US, use FedEx.
+  7. Send an email notification to customer
+INSTRUCTIONS
+
+# INSTRUCTIONS 2
+return_order_instructions = <<~INSTRUCTIONS
+  You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
+
+  You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for handling returns.
+
+  FOLLOW THESE EXACT PROCEDURES BELOW:
+
+  Return step by step procedures:
+  1. Lookup the order
+  2. Calculate total amount
+  3. Refund the payment
+  4. Mark the order as refunded
+INSTRUCTIONS
+
+# Create the assistant
+assistant = Langchain::Assistant.new(
+  # Instructions for the assistant that will be passed to OpenAI as a "system" message
+  instructions: new_order_instructions,
+  llm: llm,
+  tools: [
+    InventoryManagement.new,
+    ShippingService.new,
+    PaymentGateway.new,
+    OrderManagement.new,
+    CustomerManagement.new,
+    EmailService.new
+  ],
+  callback: Proc.new { |message| message}
+)
+
+# REQUESTS:
+
+# Submit an individual order:
+assistant.add_message_and_run content: "Andrei Bondarev (andrei@sourcelabs.io) just purchased 5 t-shirts (Y3048509). His address is 667 Madison Avenue, New York, NY 10065", auto_tool_execution: true
+
+# Clear the thread
+assistant.clear_thread!
+# Reset the instructions
+assistant.instructions = new_order_instructions
+
+# Submit another order:
+assistant.add_message_and_run content: """
+New Order
+Customer: Stephen Margheim (stephen.margheim@gmail.com)
+Items: B9384509 x 2, X3048509 x 1
+3 Leuthingerweg, Spandau, Berlin, 13591, Deutschland
+""", auto_tool_execution: true
+
+# Clear the thread
+assistant.clear_thread!
+# Set the new instructions
+assistant.instructions = return_order_instructions
+
+# Process a return:
+assistant.add_message_and_run content: "stephen.margheim@gmail.com is returning order ID: 2", auto_tool_execution: true
+
+# Clear the thread
+assistant.clear_thread!
+# Set the new instructions
+assistant.instructions = return_order_instructions
+
+# Updating inventory:
+assistant.add_message_and_run content: """
+INVENTORY UPDATE:
+B9384509: 100 - $30
+X3048509: 200 - $25
+A3045809: 10 - $35
+""", auto_tool_execution: true
+```
+
+
+# File: .env
+AI21_API_KEY=4t0qKy7xRMqWV2RuzLGdSFNGDdWsHSlA
+ANTHROPIC_API_KEY=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
+WEAVIATE_URL=https://sourcelabs-v8nc569d.weaviate.network #https://b1d7z5lrtrmagykp37evaa.gcp.weaviate.cloud/
+WEAVIATE_API_KEY=KNzwB0kG48xw1a0JmMumS2uml6MZRsPVe2G7
+OPENAI_API_KEY=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
+OPEN_WEATHER_API_KEY=34446879dfea9efea3f58cc58e1f01c9#171c39d5d65f816c1587f0a5305148c4
+QDRANT_URL=https://fce6c8dc-fd46-4ffc-b733-ac8e1912c426.us-east-1-0.aws.cloud.qdrant.io:6333
+QDRANT_API_KEY=N9Q-E2_FzyVsoGiKvVAx8Zo9l9Cp7Y1YJzx_GewWbD5oDY2Xkr1O5A
+COHERE_API_KEY=4X443MrXYqecPv60nQFWGSmMmmE7AyDS6tp13wKy
+EPSILLA_URL=http://0.0.0.0:8888
+GOOGLE_PALM_API_KEY=AIzaSyBRzMe0CRTkgIYctVPTy9eepY2f1z8FDtk
+PINECONE_API_KEY=37e0afe8-050c-4fcb-9882-6e48cac6f96c
+PINECONE_ENVIRONMENT=us-central1-gcp
+POSTGRES_URL=postgresql://localhost:5432/postgres
+REPLICATE_API_KEY=r8_FcBQIFlZ5xsV4g1RZcrIhfppn3j7rJd2DBURb
+MILVUS_URL=http://localhost:9091
+OLLAMA_URL=http://localhost:11434
+SERPAPI_API_KEY=7d93e67f3a090a47ec6323cf61818ac28ae06ff629fa311fd7a2701ae863b1d5
+NEWSCATCHER_API_KEY=J2lwsaTll151yRWVV-W-113pGtfXSofm7dEsIZeIopg
+HUGGING_FACE_API_KEY=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
+CHROMA_URL=http://localhost:8000
+LLAMACPP_MODEL_PATH=/Users/andrei/Code/llama.cpp/models/ggml-vic13b-uncensored-q5_1.bin
+LLAMACPP_N_THREADS=6
+LLAMACPP_N_GPU_LAYERS=1
+MISTRAL_AI_API_KEY=B414CH1lAbqsJAA1MB9QnkLBZ2IKqcqb
+TMDB_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZmJhYjBjNzE4ZTJjY2JhMWNjNzQ4MzU2MjgxOWY4OSIsInN1YiI6IjY1MDBjMzYxZGI0ZWQ2MTAzNDNmYzg0NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2LVW3zY51_nMW-iNYDF_Mt_NcWK_X1V9doql9ovQFGI
+ELASTICSEARCH_URL=https://elastic:wxCZfET7HzhAG_t5B=*H@localhost:9200
+ELASTICSEARCH_CA_FINGERPRINT=edfc8436f5024a0cd334f666d2eca94398e324961dd8d380ef47a5a3b395c18a
+GOOGLE_VERTEX_AI_PROJECT_ID=horoscope-gpt-404700
+FINNHUB_API_KEY=cltoj7hr01qlu9okiovgcltoj7hr01qlu9okip00
+DATABASE_NAME=nerds-and-threads.db
+#GOOGLE_GEMINI_API_KEY=AIzaSyBTnltVVLf9SBmhIDTBW8QBt9AuwBbF5Y4
+GOOGLE_GEMINI_API_KEY=AIzaSyCwlQNviSmX8p4Jq0sBjrllTQzHXBd78VA
+
+
+# File: Gemfile
+# frozen_string_literal: true
+
+ruby "3.3.4"
+
+source "https://rubygems.org"
+
+gem "ruby-openai"
+gem "faraday"
+gem "anthropic"
+gem "pry-byebug"
+gem "sqlite3"
+gem "sequel"
+gem "dotenv"
+gem "mail"
+gem 'langchainrb', path: "./../langchain"
+
+
+gem 'sinatra', '~> 3.1.0'
+gem 'thin', '~> 1.8.2'
+gem 'rack', '~> 2.2'
+
+
+# File: .env.example
+OPENAI_API_KEY=
+DATABASE_NAME=nerds-and-threads.db
+GOOGLE_GEMINI_API_KEY=
+ANTHROPIC_API_KEY=
+
+# File: output.txt
+
+
+# File: setup_db.rb
+require "bundler/setup"
+Bundler.require
+require "dotenv/load"
+
+DB = Sequel.sqlite(ENV["DATABASE_NAME"])
+
+DB.create_table :products do
+  String :sku, primary_key: true
+  Float :price
+  Integer :quantity
+end
+
+DB.create_table :orders do
+  primary_key :id
+  Integer :customer_id
+  DateTime :created_at
+end
+
+DB.create_table :order_items do
+  primary_key :id
+  foreign_key :order_id, :orders, on_delete: :cascade
+  foreign_key :product_sku, :products, type: String, key: :sku
+  Integer :quantity
+end
+
+DB.create_table :customers do
+  primary_key :id
+  String :name
+  String :email
+end
+
+products = DB[:products]
+products.insert sku: 'A3045809', price: 20.99, quantity: 100
+products.insert sku: 'B9384509', price: 21.99, quantity: 5
+products.insert sku: 'Z0394853', price: 22.99, quantity: 20
+products.insert sku: 'X3048509', price: 23.99, quantity: 3
+products.insert sku: 'Y3048509', price: 24.99, quantity: 10
+products.insert sku: 'L3048509', price: 29.99, quantity: 0
+
+
+
+# File: LICENSE
+MIT License
+
+Copyright (c) 2024 Andrei Bondarev
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+# File: main.rb
+require "bundler/setup"
+Bundler.require
+require "dotenv/load"
+
+Mail.defaults do
+  delivery_method :sendmail
+end
+
+Sequel::Model.db = Sequel.sqlite(ENV["DATABASE_NAME"])
+
+# Require all the models
+require_relative "./models/product"
+require_relative "./models/order"
+require_relative "./models/order_item"
+require_relative "./models/customer"
+
+# Require all the tools
+require_relative "./tools/inventory_management"
+require_relative "./tools/payment_gateway"
+require_relative "./tools/shipping_service"
+require_relative "./tools/order_management"
+require_relative "./tools/customer_management"
+require_relative "./tools/email_service"
+
+require "irb"
+IRB.start(__FILE__)
+
+# File: config.ru
+require './app'
+run App
+
+
+# File: .tool-versions
+ruby 3.3.4
+
+
+# File: app.rb
+require "bundler/setup"
+Bundler.require
+require "dotenv/load"
+
+require 'sinatra'
+
+Mail.defaults do
+  delivery_method :sendmail
+end
+
+Sequel::Model.db = Sequel.sqlite(ENV["DATABASE_NAME"])
+
+require_relative "./models/product"
+require_relative "./models/order"
+require_relative "./models/order_item"
+require_relative "./models/customer"
+
+# Require all the tools
+require_relative "./tools/inventory_management"
+require_relative "./tools/payment_gateway"
+require_relative "./tools/shipping_service"
+require_relative "./tools/order_management"
+require_relative "./tools/customer_management"
+require_relative "./tools/email_service"
+
+require_relative './controllers/main_controller'
+
+class App < Sinatra::Base
+  set :root, File.dirname(__FILE__)
+  set :views, Proc.new { File.join(root, "views") }
+
+  use MainController
+
+  get '/' do
+    erb :index
+  end
+end
+
+
+# File: README.md
+# E-commerce AI Assistant
+An e-commerce AI assistant built with [Langchain.rb](https://github.com/andreibondarev/langchainrb) and OpenAI. This demo articulates the idea that business logic will now also live in prompts. A lot of modern software development is stringing services (classes and APIs) together. This demo illustrate how AI can assist in executing business logic and orchestrating calls to various services.
+
+Video tutorial: https://www.loom.com/share/83aa4fd8dccb492aad4ca95da40ed0b2
+
+### Diagram
+<img src="https://github.com/patterns-ai-core/ecommerce-ai-assistant-demo/assets/541665/e17032a5-336d-44e7-b070-3695e69003f6" height="400" />
+
+### Installation
+1. `git clone`
+2. `bundle install`
+3. `cp .env.example .env` and fill it out with your values.
+4. Run `sendmail` in a separate tab.
+
+### Running
+1. Run setup_db.rb to set up the database:
+```ruby
+ruby setup_db.rb
+```
+
+2. Load Ruby REPL session with everything loaded:
+```ruby
+ruby main.rb
+```
+
+3. Paste it the following code:
+```ruby
+llm = Langchain::LLM::OpenAI.new(
+  api_key: ENV["OPENAI_API_KEY"],
+  default_options: { chat_completion_model_name: "gpt-4o-mini" }
+)
+
+# INSTRUCTIONS 1
+new_order_instructions = <<~INSTRUCTIONS
+  You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
+
+  You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for processing orders.
+
+  FOLLOW THESE EXACT PROCEDURES BELOW:
+
+  New order step by step procedures:
+  1. Create customer account if it doesn't exist
+  2. Check inventory for items
+  3. Calculate total amount
+  4. Charge customer
+  5. Create order
+  6. Create shipping label. If the address is in Europe, use DHL. If the address is in US, use FedEx.
+  7. Send an email notification to customer
+INSTRUCTIONS
+
+# INSTRUCTIONS 2
+return_order_instructions = <<~INSTRUCTIONS
+  You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
+
+  You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for handling returns.
+
+  FOLLOW THESE EXACT PROCEDURES BELOW:
+
+  Return step by step procedures:
+  1. Lookup the order
+  2. Calculate total amount
+  3. Refund the payment
+  4. Mark the order as refunded
+INSTRUCTIONS
+
+# Create the assistant
+assistant = Langchain::Assistant.new(
+  # Instructions for the assistant that will be passed to OpenAI as a "system" message
+  instructions: new_order_instructions,
+  llm: llm,
+  tools: [
+    InventoryManagement.new,
+    ShippingService.new,
+    PaymentGateway.new,
+    OrderManagement.new,
+    CustomerManagement.new,
+    EmailService.new
+  ],
+  callback: Proc.new { |message| message}
+)
+
+# REQUESTS:
+
+# Submit an individual order:
+assistant.add_message_and_run content: "Andrei Bondarev (andrei@sourcelabs.io) just purchased 5 t-shirts (Y3048509). His address is 667 Madison Avenue, New York, NY 10065", auto_tool_execution: true
+
+# Clear the thread
+assistant.clear_thread!
+# Reset the instructions
+assistant.instructions = new_order_instructions
+
+# Submit another order:
+assistant.add_message_and_run content: """
+New Order
+Customer: Stephen Margheim (stephen.margheim@gmail.com)
+Items: B9384509 x 2, X3048509 x 1
+3 Leuthingerweg, Spandau, Berlin, 13591, Deutschland
+""", auto_tool_execution: true
+
+# Clear the thread
+assistant.clear_thread!
+# Set the new instructions
+assistant.instructions = return_order_instructions
+
+# Process a return:
+assistant.add_message_and_run content: "stephen.margheim@gmail.com is returning order ID: 2", auto_tool_execution: true
+
+# Clear the thread
+assistant.clear_thread!
+# Set the new instructions
+assistant.instructions = return_order_instructions
+
+# Updating inventory:
+assistant.add_message_and_run content: """
+INVENTORY UPDATE:
+B9384509: 100 - $30
+X3048509: 200 - $25
+A3045809: 10 - $35
+""", auto_tool_execution: true
+```
+
+
+# File: .env
+
+
+# File: controllers/main_controller.rb
+class MainController < Sinatra::Base
+  get '/stream' do
+    content_type 'text/event-stream'
+    stream :keep_open do |out|
+      assistant = Langchain::Assistant.new(
+        instructions: new_order_instructions,
+        llm: llm,
+        tools: [
+          InventoryManagement.new,
+          ShippingService.new,
+          PaymentGateway.new,
+          OrderManagement.new,
+          CustomerManagement.new,
+          EmailService.new
+        ],
+        callback: Proc.new { |message| 
+          out << "data: #{message.content}\n\n"
+        }
+      )
+
+      assistant.add_message_and_run content: "Andrei Bondarev (andrei@sourcelabs.io) just purchased 5 t-shirts (Y3048509). His address is 667 Madison Avenue, New York, NY 10065", auto_tool_execution: true
+
+      out.close
+    end
+  end
+
+  private
+
+  def new_order_instructions
+    new_order_instructions = <<~INSTRUCTIONS
+      You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
+    
+      You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for processing orders.
+    
+      FOLLOW THESE EXACT PROCEDURES BELOW:
+    
+      New order step by step procedures:
+      1. Create customer account if it doesn't exist
+      2. Check inventory for items
+      3. Calculate total amount
+      4. Charge customer
+      5. Create order
+      6. Create shipping label. If the address is in Europe, use DHL. If the address is in US, use FedEx.
+      7. Send an email notification to customer
+    INSTRUCTIONS
+  end
+
+  def llm
+    Langchain::LLM::OpenAI.new(
+      api_key: ENV["OPENAI_API_KEY"],
+      default_options: { chat_completion_model_name: "gpt-4o-mini" }
+    )
+  end
+end
+
+
+# File: views/index.erb
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Assistant Chat</title>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const eventSource = new EventSource('/stream');
+      const chatContainer = document.getElementById('chat-container');
+
+      eventSource.onmessage = function(event) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = event.data;
+        chatContainer.appendChild(messageElement);
+      };
+
+      eventSource.onerror = function(error) {
+        console.error('EventSource failed:', error);
+        eventSource.close();
+      };
+    });
+  </script>
+</head>
+<body>
+  <h1>AI Assistant Chat</h1>
+  <div id="chat-container"></div>
+</body>
+</html>
