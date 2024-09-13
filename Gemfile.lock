@@ -1,14 +1,3 @@
-PATH
-  remote: ../langchain
-  specs:
-    langchainrb (0.15.4)
-      baran (~> 0.1.9)
-      json-schema (~> 4)
-      matrix
-      pragmatic_segmenter (~> 0.3.0)
-      rainbow (~> 3.1.0)
-      zeitwerk (~> 2.5)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -36,6 +25,13 @@ GEM
       net-http
     json-schema (4.3.1)
       addressable (>= 2.8)
+    langchainrb (0.15.5)
+      baran (~> 0.1.9)
+      json-schema (~> 4)
+      matrix
+      pragmatic_segmenter (~> 0.3.0)
+      rainbow (~> 3.1.0)
+      zeitwerk (~> 2.5)
     logger (1.6.0)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
@@ -118,7 +114,7 @@ DEPENDENCIES
   anthropic
   dotenv
   faraday
-  langchainrb!
+  langchainrb
   mail
   pry-byebug
   rack (~> 2.2)

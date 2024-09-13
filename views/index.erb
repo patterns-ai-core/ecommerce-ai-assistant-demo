@@ -1,29 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Assistant Chat</title>
-  <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const eventSource = new EventSource('/stream');
-      const chatContainer = document.getElementById('chat-container');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce AI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar styles */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const chatContainer = document.getElementById('chat-container');
+            const instructionsForm = document.getElementById('instructions-form');
+            const instructionsInput = document.getElementById('instructions-input');
+            const messageInput = document.getElementById('message-input');
 
-      eventSource.onmessage = function(event) {
-        const messageElement = document.createElement('div');
-        messageElement.textContent = event.data;
-        chatContainer.appendChild(messageElement);
-      };
+            let eventSource;
 
-      eventSource.onerror = function(error) {
-        console.error('EventSource failed:', error);
-        eventSource.close();
-      };
-    });
-  </script>
+            instructionsForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (eventSource) {
+                    eventSource.close();
+                }
+
+                chatContainer.innerHTML = '';
+
+                eventSource = new EventSource(`/run?instructions=${encodeURIComponent(instructionsInput.value)}&message=${encodeURIComponent(messageInput.value)}`);
+
+                eventSource.onmessage = function(event) {
+                    const messageElement = document.createElement('div');
+                    messageElement.textContent = event.data;
+                    messageElement.className = 'mb-2 p-2 bg-gray-100 rounded';
+                    chatContainer.appendChild(messageElement);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                };
+
+                eventSource.onerror = function(error) {
+                    console.error('EventSource failed:', error);
+                    eventSource.close();
+                };
+
+                // instructionsInput.value = '';
+                // messageInput.value = '';
+            });
+        });
+    </script>
 </head>
-<body>
-  <h1>AI Assistant Chat</h1>
-  <div id="chat-container"></div>
+<body class="bg-gray-100 h-full flex flex-col">
+    <header class="bg-blue-600 text-white p-4">
+        <h1 class="text-2xl font-bold">AI Assistant Chat</h1>
+    </header>
+    <main class="flex-grow flex overflow-hidden">
+        <!-- Left Pane (40% width) -->
+        <div class="w-2/5 bg-white p-4 shadow-md flex flex-col overflow-auto custom-scrollbar border-r border-gray-200">
+            <h2 class="text-xl font-bold mb-4">Input</h2>
+            <form id="instructions-form" class="flex flex-col h-full">
+                <label for="instructions-input" class="mb-2 font-semibold">Instructions:</label>
+                <textarea id="instructions-input" class="border p-2 mb-4 flex-grow resize-none custom-scrollbar" placeholder="Enter instructions here..."></textarea>
+                <label for="message-input" class="mb-2 font-semibold">Message:</label>
+                <textarea id="message-input" class="border p-2 mb-4 h-32 resize-none custom-scrollbar" placeholder="Enter your message here..."></textarea>
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-300">Run</button>
+            </form>
+        </div>
+
+        <!-- Right Pane (60% width) -->
+        <div class="w-3/5 bg-white p-4 shadow-md flex flex-col overflow-hidden">
+            <h2 class="text-xl font-bold mb-4">Chat</h2>
+            <div id="chat-container" class="flex-grow overflow-y-auto border p-2 custom-scrollbar">
+                <!-- Chat messages will be appended here -->
+            </div>
+        </div>
+    </main>
 </body>
 </html>
