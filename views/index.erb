@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-commerce AI Assistant</title>
+    <title>AI Assistant Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom scrollbar styles */
@@ -30,6 +30,39 @@
 
             let eventSource;
 
+            function formatContent(content) {
+                if (typeof content === 'string') {
+                    return content;
+                } else if (typeof content === 'object') {
+                    return JSON.stringify(content, null, 2);
+                } else {
+                    return String(content);
+                }
+            }
+
+            function addMessageToChatContainer(message) {
+                const messageElement = document.createElement('div');
+                const formattedContent = formatContent(message.content);
+                messageElement.textContent = `${message.emoji}: ${formattedContent}`;
+                let bgColor;
+                switch (message.role) {
+                    case 'user':
+                        bgColor = 'bg-blue-100';
+                        break;
+                    case 'assistant':
+                        bgColor = 'bg-red-100';
+                        break;
+                    case 'tool':
+                        bgColor = 'bg-gray-100';
+                        break;
+                    default:
+                        bgColor = 'bg-white';
+                }
+                messageElement.className = `mb-2 p-2 rounded ${bgColor} whitespace-pre-wrap`;
+                chatContainer.appendChild(messageElement);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
             instructionsForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -39,14 +72,21 @@
 
                 chatContainer.innerHTML = '';
 
+                // Add user message to chat
+                const userMessage = messageInput.value.trim();
+                if (userMessage) {
+                    addMessageToChatContainer({
+                        role: 'user',
+                        content: userMessage,
+                        emoji: '👤'
+                    });
+                }
+
                 eventSource = new EventSource(`/run?instructions=${encodeURIComponent(instructionsInput.value)}&message=${encodeURIComponent(messageInput.value)}`);
 
                 eventSource.onmessage = function(event) {
-                    const messageElement = document.createElement('div');
-                    messageElement.textContent = event.data;
-                    messageElement.className = 'mb-2 p-2 bg-gray-100 rounded';
-                    chatContainer.appendChild(messageElement);
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                    const message = JSON.parse(event.data);
+                    addMessageToChatContainer(message);
                 };
 
                 eventSource.onerror = function(error) {

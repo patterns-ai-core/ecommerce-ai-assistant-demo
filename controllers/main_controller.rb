@@ -25,9 +25,7 @@ class MainController < Sinatra::Base
           EmailService.new
         ],
         add_message_callback: Proc.new { |message|
-          format_message(message)
-
-          out << "data: #{format_message(message)}\n\n"
+          out << "data: #{JSON.generate(format_message(message))}\n\n"
         }
       )
 
@@ -40,15 +38,15 @@ class MainController < Sinatra::Base
   private
 
   def format_message(message)
-    "#{format_role(message.role)}: #{format_content(message)}"
+    {
+      role: message.role,
+      content: format_content(message),
+      emoji: format_role(message.role)
+    }
   end
 
   def format_content(message)
-    if message.content.empty?
-      message.tool_calls
-    else
-      message.content
-    end
+    message.content.empty? ? message.tool_calls : message.content
   end
 
   def format_role(role)
@@ -60,7 +58,7 @@ class MainController < Sinatra::Base
     when "tool"
       "🛠️"
     else
-      role
+      "❓"
     end
   end
 
