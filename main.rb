@@ -6,7 +6,7 @@ Mail.defaults do
   delivery_method :sendmail
 end
 
-Sequel::Model.db = Sequel.sqlite(ENV["DATABASE_NAME"])
+Sequel::Model.db = Sequel.connect(ENV["DATABASE_URL"])
 
 # Require all the models
 require_relative "./models/product"

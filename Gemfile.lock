@@ -55,6 +55,7 @@ GEM
       timeout
     net-smtp (0.5.0)
       net-protocol
+    pg (1.5.8)
     pragmatic_segmenter (0.3.24)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -79,16 +80,6 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.1.0)
       tilt (~> 2.0)
-    sqlite3 (2.0.2-aarch64-linux-gnu)
-    sqlite3 (2.0.2-aarch64-linux-musl)
-    sqlite3 (2.0.2-arm-linux-gnu)
-    sqlite3 (2.0.2-arm-linux-musl)
-    sqlite3 (2.0.2-arm64-darwin)
-    sqlite3 (2.0.2-x86-linux-gnu)
-    sqlite3 (2.0.2-x86-linux-musl)
-    sqlite3 (2.0.2-x86_64-darwin)
-    sqlite3 (2.0.2-x86_64-linux-gnu)
-    sqlite3 (2.0.2-x86_64-linux-musl)
     thin (1.8.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -116,12 +107,12 @@ DEPENDENCIES
   faraday
   langchainrb
   mail
+  pg
   pry-byebug
   rack (~> 2.2)
   ruby-openai
   sequel
   sinatra (~> 3.1.0)
-  sqlite3
   thin (~> 1.8.2)
 
 RUBY VERSION

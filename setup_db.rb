@@ -2,7 +2,7 @@ require "bundler/setup"
 Bundler.require
 require "dotenv/load"
 
-DB = Sequel.sqlite(ENV["DATABASE_NAME"])
+DB = Sequel.connect(ENV['DATABASE_URL'])
 
 DB.create_table :products do
   String :sku, primary_key: true
