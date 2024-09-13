@@ -13,11 +13,11 @@ class OrderManagement
     end
   end
 
-  define_function :mark_as_refunded, description: "Inventory Management Service: Mark order as refunded" do
+  define_function :mark_as_refunded, description: "Order Management Service: Mark order as refunded" do
     property :order_id, type: "string", description: "Order ID", required: true
   end
 
-  define_function :find_order, description: "Inventory Management Service: Find order by ID" do
+  define_function :find_order, description: "Order Management Service: Find order by ID" do
     property :order_id, type: "string", description: "Order ID", required: true
   end
 
