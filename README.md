@@ -32,20 +32,20 @@ llm = Langchain::LLM::OpenAI.new(
 
 # INSTRUCTIONS 1
 new_order_instructions = <<~INSTRUCTIONS
-  You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
+Today is September 13, 2024.
 
-  You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for processing orders.
+You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
 
-  FOLLOW THESE EXACT PROCEDURES BELOW:
+You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for processing orders.
 
-  New order step by step procedures:
-  1. Create customer account if it doesn't exist
-  2. Check inventory for items
-  3. Calculate total amount
-  4. Charge customer
-  5. Create order
-  6. Create shipping label. If the address is in Europe, use DHL. If the address is in US, use FedEx.
-  7. Send an email notification to customer
+New order step by step procedures below. Follow them in this exact sequential (non-parallel) order:
+Step 1. Create customer account if it doesn't exist
+Step 2. Check inventory for items
+Step 3. Calculate total amount
+Step 4. Charge customer
+Step 5. Create order
+Step 6. Create shipping label. If the address is in Europe, use DHL. If the address is in US, use FedEx.
+Step 7. Send an email notification to customer
 INSTRUCTIONS
 
 # INSTRUCTIONS 2
@@ -74,15 +74,16 @@ assistant = Langchain::Assistant.new(
     PaymentGateway.new,
     OrderManagement.new,
     CustomerManagement.new,
-    EmailService.new
+    EmailService.new,
+    Langchain::Tool::Database.new(connection_string: "sqlite://#{ENV["DATABASE_NAME"]}")
   ],
-  callback: Proc.new { |message| message}
+  add_message_callback: Proc.new { |message| message}
 )
 
 # REQUESTS:
 
 # Submit an individual order:
-assistant.add_message_and_run content: "Andrei Bondarev (andrei@sourcelabs.io) just purchased 5 t-shirts (Y3048509). His address is 667 Madison Avenue, New York, NY 10065", auto_tool_execution: true
+assistant.add_message_and_run! content: "{ customer_email: 'andrei@sourcelabs.io', quantity: 5, sku: 'Y3048509', address: '667 Madison Avenue, New York, NY 10065'}"
 
 # Clear the thread
 assistant.clear_thread!

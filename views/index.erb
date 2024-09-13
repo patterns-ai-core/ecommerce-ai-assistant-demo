@@ -72,17 +72,12 @@
 
                 chatContainer.innerHTML = '';
 
-                // Add user message to chat
                 const userMessage = messageInput.value.trim();
-                if (userMessage) {
-                    addMessageToChatContainer({
-                        role: 'user',
-                        content: userMessage,
-                        emoji: '👤'
-                    });
+                if (!userMessage) {
+                    return; // Don't proceed if there's no message
                 }
 
-                eventSource = new EventSource(`/run?instructions=${encodeURIComponent(instructionsInput.value)}&message=${encodeURIComponent(messageInput.value)}`);
+                eventSource = new EventSource(`/run?instructions=${encodeURIComponent(instructionsInput.value)}&message=${encodeURIComponent(userMessage)}`);
 
                 eventSource.onmessage = function(event) {
                     const message = JSON.parse(event.data);

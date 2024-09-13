@@ -22,5 +22,4 @@ require_relative "./tools/order_management"
 require_relative "./tools/customer_management"
 require_relative "./tools/email_service"
 
-require "irb"
-IRB.start(__FILE__)
+require_relative "./controllers/main_controller"
