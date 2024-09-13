@@ -1,14 +1,29 @@
 class MainController < Sinatra::Base
   configure do
     set :views, File.expand_path('../views', __dir__)
+    set :protection, except: [:json_csrf]
+  end
+
+  before do
+    content_type :json
+    headers 'Access-Control-Allow-Origin' => '*',
+             'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST']
+  end
+
+  options "*" do
+    response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept"
+    200
   end
 
   get '/' do
+    content_type :html
     erb :index
   end
 
   get '/run' do
     content_type 'text/event-stream'
+    headers 'X-Accel-Buffering' => 'no' # This line is for NGINX compatibility
     stream :keep_open do |out|
       instructions = params[:instructions]
       message = params[:message]
@@ -22,7 +37,8 @@ class MainController < Sinatra::Base
           PaymentGateway.new,
           OrderManagement.new,
           CustomerManagement.new,
-          EmailService.new
+          EmailService.new,
+          Langchain::Tool::Database.new(connection_string: ENV["DATABASE_URL"])          
         ],
         add_message_callback: Proc.new { |message|
           out << "data: #{JSON.generate(format_message(message))}\n\n"

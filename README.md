@@ -75,7 +75,7 @@ assistant = Langchain::Assistant.new(
     OrderManagement.new,
     CustomerManagement.new,
     EmailService.new,
-    Langchain::Tool::Database.new(connection_string: "sqlite://#{ENV["DATABASE_NAME"]}")
+    Langchain::Tool::Database.new(connection_string: ENV["DATABASE_URL"])
   ],
   add_message_callback: Proc.new { |message| message}
 )

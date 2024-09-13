@@ -23,7 +23,7 @@ class EmailService
     order = Order.find(id: order_id)
     return "Order not found" if order.nil?
 
-    Mail.deliver do
+    Mail.new do
       from     "do-not-reply@nerds-and-threads.com"
       to       customer.email
       subject  "Order Confirmation: #{order.id}"
