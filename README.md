@@ -83,7 +83,7 @@ assistant = Langchain::Assistant.new(
 # REQUESTS:
 
 # Submit an individual order:
-assistant.add_message_and_run! content: "{ customer_email: 'andrei@sourcelabs.io', quantity: 5, sku: 'Y3048509', address: '667 Madison Avenue, New York, NY 10065'}"
+assistant.add_message_and_run! content: "New order: { customer_email: 'andrei@sourcelabs.io', quantity: 5, sku: 'Y3048509', address: '667 Madison Avenue, New York, NY 10065'}"
 
 # Clear the thread
 assistant.clear_thread!

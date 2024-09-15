@@ -22,7 +22,8 @@ class MainController < Sinatra::Base
           PaymentGateway.new,
           OrderManagement.new,
           CustomerManagement.new,
-          EmailService.new
+          EmailService.new,
+          Langchain::Tool::Database.new(connection_string: "sqlite://#{ENV["DATABASE_NAME"]}")
         ],
         add_message_callback: Proc.new { |message|
           out << "data: #{JSON.generate(format_message(message))}\n\n"
