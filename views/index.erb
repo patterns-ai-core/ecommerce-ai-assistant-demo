@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecommerce AI Assistant</title>
+    <title>Ecommerce AI Assistant 🤖</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom scrollbar styles */
@@ -27,6 +27,7 @@
             const instructionsForm = document.getElementById('instructions-form');
             const instructionsInput = document.getElementById('instructions-input');
             const messageInput = document.getElementById('message-input');
+            const runButton = document.getElementById('run-button');
 
             let eventSource;
 
@@ -63,6 +64,18 @@
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
 
+            function setRunningState(isRunning) {
+                runButton.disabled = isRunning;
+                runButton.textContent = isRunning ? '⏳ Running...' : 'Run';
+                if (isRunning) {
+                    runButton.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                    runButton.classList.add('bg-blue-300');
+                } else {
+                    runButton.classList.remove('bg-blue-300');
+                    runButton.classList.add('bg-blue-500', 'hover:bg-blue-600');
+                }
+            }
+
             instructionsForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -70,12 +83,12 @@
                     eventSource.close();
                 }
 
-                chatContainer.innerHTML = '';
-
                 const userMessage = messageInput.value.trim();
                 if (!userMessage) {
-                    return; // Don't proceed if there's no message
+                    return;
                 }
+
+                setRunningState(true);
 
                 eventSource = new EventSource(`/run?instructions=${encodeURIComponent(instructionsInput.value)}&message=${encodeURIComponent(userMessage)}`);
 
@@ -87,17 +100,24 @@
                 eventSource.onerror = function(error) {
                     console.error('EventSource failed:', error);
                     eventSource.close();
+                    setRunningState(false);
                 };
 
-                // instructionsInput.value = '';
-                // messageInput.value = '';
+                eventSource.onopen = function() {
+                    messageInput.value = '';
+                };
+
+                eventSource.addEventListener('done', function(e) {
+                    setRunningState(false);
+                    eventSource.close();
+                });
             });
         });
     </script>
 </head>
 <body class="bg-gray-100 h-full flex flex-col">
     <header class="bg-blue-600 text-white p-4">
-        <h1 class="text-2xl font-bold">Ecommerce AI Assistant</h1>
+        <h1 class="text-2xl font-bold">Ecommerce AI Assistant 🤖</h1>
     </header>
     <main class="flex-grow flex overflow-hidden">
         <!-- Left Pane (40% width) -->
@@ -108,7 +128,7 @@
                 <textarea id="instructions-input" class="border p-2 mb-4 flex-grow resize-none custom-scrollbar" placeholder="Enter instructions here..."></textarea>
                 <label for="message-input" class="mb-2 font-semibold">Message:</label>
                 <textarea id="message-input" class="border p-2 mb-4 h-32 resize-none custom-scrollbar" placeholder="Enter your message here..."></textarea>
-                <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-300">Run</button>
+                <button id="run-button" type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-300">Run</button>
             </form>
         </div>
 

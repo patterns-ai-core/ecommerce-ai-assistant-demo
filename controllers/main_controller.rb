@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 class MainController < Sinatra::Base
   configure do
     set :views, File.expand_path('../views', __dir__)
+    enable :sessions
   end
 
   get '/' do
@@ -13,7 +16,7 @@ class MainController < Sinatra::Base
       instructions = params[:instructions]
       message = params[:message]
 
-      assistant = Langchain::Assistant.new(
+      session[:assistant] ||= Langchain::Assistant.new(
         instructions: instructions,
         llm: llm,
         tools: [
@@ -22,16 +25,19 @@ class MainController < Sinatra::Base
           PaymentGateway.new,
           OrderManagement.new,
           CustomerManagement.new,
-          EmailService.new,
-          Langchain::Tool::Database.new(connection_string: "sqlite://#{ENV["DATABASE_NAME"]}")
+          EmailService.new
         ],
         add_message_callback: Proc.new { |message|
           out << "data: #{JSON.generate(format_message(message))}\n\n"
         }
       )
+      # Rewrite instructions in case they changed.
+      session[:assistant].instructions = instructions
 
-      assistant.add_message_and_run content: message, auto_tool_execution: true
+      # Append new message and run with auto_tool_execution: true
+      session[:assistant].add_message_and_run! content: message
 
+      out << "event: done\ndata: Stream finished\n\n"
       out.close
     end
   end
