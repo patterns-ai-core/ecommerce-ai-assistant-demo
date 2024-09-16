@@ -25,7 +25,7 @@ GEM
       net-http
     json-schema (4.3.1)
       addressable (>= 2.8)
-    langchainrb (0.15.5)
+    langchainrb (0.15.6)
       baran (~> 0.1.9)
       json-schema (~> 4)
       matrix
