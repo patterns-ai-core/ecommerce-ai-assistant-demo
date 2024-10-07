@@ -16,7 +16,7 @@ class InventoryManagement
   end
 
   def update_inventory(sku:, quantity:)
-    Langchain.logger.info("[ 📋 ] Updating Inventory for #{sku} with #{quantity} unit(s)", for: self.class)
+    Langchain.logger.info("[ 📋 ] Updating Inventory for #{sku} with #{quantity} unit(s)")
 
     product = Product.find(sku: sku)
     product.quantity = quantity
@@ -24,7 +24,7 @@ class InventoryManagement
   end
 
   def find_product(sku:)
-    Langchain.logger.info("[ 📋 ] Looking up Product SKU: #{sku}", for: self.class)
+    Langchain.logger.info("[ 📋 ] Looking up Product SKU: #{sku}")
 
     product = Product.find(sku: sku)
 

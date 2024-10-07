@@ -12,4 +12,7 @@ gem "sqlite3"
 gem "sequel"
 gem "dotenv"
 gem "mail"
-gem 'langchainrb', git: "https://github.com/patterns-ai-core/langchainrb.git", branch: "main"
+gem 'langchainrb', "0.17.1"
+gem 'sinatra', '~> 3.1.0'
+gem 'thin', '~> 1.8.2'
+gem 'rack', '~> 2.2'

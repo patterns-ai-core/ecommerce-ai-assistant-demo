@@ -16,7 +16,7 @@ class CustomerManagement
   end
 
   def create_customer(name:, email:)
-    Langchain.logger.info("[ 👤 ] Creating Customer record for #{email}", for: self.class)
+    Langchain.logger.info("[ 👤 ] Creating Customer record for #{email}")
 
     customer = Customer.create(name: name, email: email)
 
@@ -24,7 +24,7 @@ class CustomerManagement
   end
 
   def find_customer(email:)
-    Langchain.logger.info("[ 👤 ] Looking up Customer record for #{email}", for: self.class)
+    Langchain.logger.info("[ 👤 ] Looking up Customer record for #{email}")
 
     customer = Customer.find(email: email)
 

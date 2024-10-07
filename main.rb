@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 require "bundler/setup"
 Bundler.require
 require "dotenv/load"
+
+Langchain.logger.level = Logger::DEBUG
 
 Mail.defaults do
   delivery_method :sendmail
@@ -22,5 +26,4 @@ require_relative "./tools/order_management"
 require_relative "./tools/customer_management"
 require_relative "./tools/email_service"
 
-require "irb"
-IRB.start(__FILE__)
+require_relative "./controllers/main_controller"
