@@ -25,12 +25,11 @@ GEM
       net-http
     json-schema (4.3.1)
       addressable (>= 2.8)
-    langchainrb (0.15.6)
+    langchainrb (0.17.1)
       baran (~> 0.1.9)
       json-schema (~> 4)
       matrix
       pragmatic_segmenter (~> 0.3.0)
-      rainbow (~> 3.1.0)
       zeitwerk (~> 2.5)
     logger (1.6.0)
     mail (2.8.1)
@@ -66,7 +65,6 @@ GEM
     rack (2.2.9)
     rack-protection (3.1.0)
       rack (~> 2.2, >= 2.2.4)
-    rainbow (3.1.1)
     ruby-openai (7.1.0)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
@@ -114,7 +112,7 @@ DEPENDENCIES
   anthropic
   dotenv
   faraday
-  langchainrb
+  langchainrb (= 0.17.1)
   mail
   pry-byebug
   rack (~> 2.2)
