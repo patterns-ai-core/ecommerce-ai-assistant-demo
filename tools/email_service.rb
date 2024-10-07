@@ -15,7 +15,7 @@ class EmailService
     customer_id:,
     order_id:
   )
-    Langchain.logger.info("[ 📧 ] Sending an email notification to Customer ID: #{customer_id}", for: self.class)
+    Langchain.logger.info("[ 📧 ] Sending an email notification to Customer ID: #{customer_id}")
 
     customer = Customer.find(id: customer_id)
     return "Customer not found" if customer.nil?

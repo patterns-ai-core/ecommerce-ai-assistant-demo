@@ -3,7 +3,7 @@
 class Product < Sequel::Model
   unrestrict_primary_key
 
-  one_to_many :order_items, key: :product_sku
+  one_to_many :order_items, key: :sku, primary_key: :sku
 
   def validate
     super

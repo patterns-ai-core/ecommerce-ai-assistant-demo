@@ -4,6 +4,8 @@ require "bundler/setup"
 Bundler.require
 require "dotenv/load"
 
+Langchain.logger.level = Logger::DEBUG
+
 Mail.defaults do
   delivery_method :sendmail
 end

@@ -34,7 +34,7 @@ llm = Langchain::LLM::OpenAI.new(
 new_order_instructions = <<~INSTRUCTIONS
 Today is September 13, 2024.
 
-You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
+You are an AI that runs an e-commerce store called "Nerds & Threads" that sells comfy nerdy t-shirts for software engineers that work from home.
 
 You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for processing orders.
 
@@ -50,17 +50,19 @@ INSTRUCTIONS
 
 # INSTRUCTIONS 2
 return_order_instructions = <<~INSTRUCTIONS
-  You are an AI that runs an e-commerce store called “Nerds & Threads” that sells comfy nerdy t-shirts for software engineers that work from home.
+You are an AI that runs an e-commerce store called "Nerds & Threads" that sells comfy nerdy t-shirts for software engineers that work from home.
 
-  You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for handling returns.
+You have access to the shipping service, inventory service, order management, payment gateway, email service and customer management systems. You are responsible for handling returns.
 
-  FOLLOW THESE EXACT PROCEDURES BELOW:
+FOLLOW THESE EXACT PROCEDURES BELOW:
 
-  Return step by step procedures:
-  1. Lookup the order
-  2. Calculate total amount
-  3. Refund the payment
-  4. Mark the order as refunded
+Return Order step by step procedures.
+Follow them in this exact sequential (non-parallel) order:
+
+Step 1. Lookup the order
+Step 2. Calculate total amount
+Step 3. Refund the payment
+Step 4. Mark the order as refunded
 INSTRUCTIONS
 
 # Create the assistant

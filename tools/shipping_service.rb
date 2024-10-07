@@ -16,13 +16,13 @@ class ShippingService
   end
 
   def create_shipping_label(customer_id:, address:, provider:)
-    Langchain.logger.info("[ 🚚 ] Creating shipping label for customer ID: #{customer_id}", for: self.class)
+    Langchain.logger.info("[ 🚚 ] Creating shipping label for customer ID: #{customer_id}")
 
     {success: true, tracking_number: SecureRandom.uuid, provider: provider}
   end
 
   def create_return_label(customer_id:, address:, provider:)
-    Langchain.logger.info("[ 🚚 ] Creating return shipping label for customer ID: #{customer_id}", for: self.class)
+    Langchain.logger.info("[ 🚚 ] Creating return shipping label for customer ID: #{customer_id}")
 
     return "Invalid provider" unless ["ups", "fedex", "usps", "dhl"].include?(provider)
 

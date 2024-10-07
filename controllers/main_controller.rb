@@ -25,7 +25,8 @@ class MainController < Sinatra::Base
           PaymentGateway.new,
           OrderManagement.new,
           CustomerManagement.new,
-          EmailService.new
+          EmailService.new,
+          Langchain::Tool::Database.new(connection_string: "sqlite://#{ENV["DATABASE_NAME"]}")
         ],
         add_message_callback: Proc.new { |message|
           out << "data: #{JSON.generate(format_message(message))}\n\n"
@@ -53,7 +54,7 @@ class MainController < Sinatra::Base
   end
 
   def format_content(message)
-    message.content.empty? ? message.tool_calls : message.content
+    message.content.empty? ? message.tool_calls.first.dig("function") : message.content
   end
 
   def format_role(role)
@@ -62,7 +63,7 @@ class MainController < Sinatra::Base
       "👤"
     when "assistant"
       "🤖"
-    when "tool"
+    when "tool", "tool_result"
       "🛠️"
     else
       "❓"

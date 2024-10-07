@@ -21,7 +21,7 @@ end
 DB.create_table :order_items do
   primary_key :id
   foreign_key :order_id, :orders, on_delete: :cascade
-  foreign_key :product_sku, :products, type: String, key: :sku
+  foreign_key :sku, :products, type: String
   Integer :quantity
 end
 
