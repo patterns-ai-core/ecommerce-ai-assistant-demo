@@ -57,10 +57,6 @@ class OrderManagement
 
     return "Order not found" if order.nil?
 
-    order
-      .to_hash
-      .merge(
-        order_items: order.order_items.map(&:to_hash)
-      )
+    { order: order.to_hash.merge(order_items: order.order_items.map(&:to_hash)) }
   end
 end
