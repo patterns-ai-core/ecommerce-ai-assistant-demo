@@ -12,9 +12,6 @@ class InventoryManagement
     property :sku, type: "string", description: "Product SKU number", required: true
   end
 
-  def initialize
-  end
-
   def update_inventory(sku:, quantity:)
     Langchain.logger.info("[ 📋 ] Updating Inventory for #{sku} with #{quantity} unit(s)")
 

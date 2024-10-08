@@ -8,9 +8,6 @@ class EmailService
     property :order_id, type: "number", description: "Order ID", required: true
   end
 
-  def initialize
-  end
-
   def send_email(
     customer_id:,
     order_id:

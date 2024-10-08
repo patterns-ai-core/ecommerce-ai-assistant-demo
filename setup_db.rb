@@ -16,6 +16,7 @@ DB.create_table :orders do
   primary_key :id
   Integer :customer_id
   DateTime :created_at
+  Float :amount
 end
 
 DB.create_table :order_items do

@@ -11,6 +11,7 @@ class OrderManagement
         property :quantity, type: "number", description: "Quantity of the product", required: true
       end
     end
+    property :amount, type: "number", description: "Total amount (USD) of the order", required: true
   end
 
   define_function :mark_as_refunded, description: "Order Management Service: Mark order as refunded" do
@@ -21,15 +22,16 @@ class OrderManagement
     property :order_id, type: "string", description: "Order ID", required: true
   end
 
-  def initialize
-  end
-
-  def create_order(customer_id:, order_items: [])
+  def create_order(customer_id:, amount:, order_items: [])
     Langchain.logger.info("[ 📦 ] Creating Order record for customer ID: #{customer_id}")
 
     return "Order items cannot be empty" if order_items.empty?
 
-    order = Order.create(customer_id: customer_id, created_at: Time.now)
+    order = Order.create(
+      customer_id: customer_id,
+      created_at: Time.now,
+      amount: amount
+    )
 
     return "Order not found" if order.nil?
 

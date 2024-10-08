@@ -12,9 +12,6 @@ class CustomerManagement
     property :email, type: "string", description: "Email", required: true
   end
 
-  def initialize
-  end
-
   def create_customer(name:, email:)
     Langchain.logger.info("[ 👤 ] Creating Customer record for #{email}")
 
