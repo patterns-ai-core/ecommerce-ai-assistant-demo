@@ -1,28 +1,28 @@
-# E-commerce AI Assistant
-An e-commerce AI assistant built with [Langchain.rb](https://github.com/andreibondarev/langchainrb) and OpenAI. This demo articulates the idea that business logic will now also live in prompts. A lot of modern software development is stringing services (classes and APIs) together. This demo illustrate how AI can assist in executing business logic and orchestrating calls to various services.
+# E-commerce AI Agent
+An e-commerce AI Agent built with [Langchain.rb](https://github.com/andreibondarev/langchainrb) and OpenAI. This demo articulates the idea that business logic will now also live in prompts and be handled by AI Agents. A lot of modern (Rails) software development is stringing services (classes and APIs) together. This demo illustrate how AI can assist in executing business logic and orchestrating calls to various services.
 
-### Diagram
-<img src="https://github.com/patterns-ai-core/ecommerce-ai-assistant-demo/assets/541665/e17032a5-336d-44e7-b070-3695e69003f6" height="400" />
+### Background
+![Nerds   Threads](https://github.com/user-attachments/assets/3be65a6d-f1aa-40af-888d-63c0c46d07cc)
 
 ### Installation
 1. `git clone`
 2. `bundle install`
-3. `cp .env.example .env` and fill it out with your values.
+3. `cp .env.example .env` and fill it out with your values (OpenAI API key).
 4. Run `sendmail` in a separate tab.
 
 ### Running
 1. Install the dependencies:
-```ruby
+```bash
 bundle install
 ```
 
 2. Run setup_db.rb to set up the SQLite database:
-```ruby
+```bash
 ruby setup_db.rb
 ```
 
 3. Run the rack server:
-```ruby
+```bash
 bundle exec rackup config.ru
 ```
 
