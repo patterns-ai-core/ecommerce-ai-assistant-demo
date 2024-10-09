@@ -58,7 +58,7 @@ New order: { customer_email: 'andrei@sourcelabs.io', quantity: 5, sku: 'Y3048509
 Return Order: { customer_email: 'andrei@sourcelabs.io', order_id: 1 }
 ```
 
-9. Update the "Instructions" field wiht instructions that update Return Order procedures:
+9. Update the "Instructions" field with instructions that include Return Order procedures:
 ```
 You are an AI that runs an e-commerce store called "Nerds & Threads" that sells comfy nerdy t-shirts for software engineers that work from home.
 
@@ -79,9 +79,8 @@ Return Order step by step procedures.
 Follow them in this exact sequential (non-parallel) order:
 
 Step 1. Lookup the order
-Step 2. Calculate total amount
-Step 3. Refund the payment
-Step 4. Mark the order as refunded
+Step 2. Refund the payment
+Step 3. Mark the order as refunded
 ```
 
 10. Rerun the Return Order event:
