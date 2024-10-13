@@ -19,6 +19,7 @@ class MainController < Sinatra::Base
       session[:assistant] ||= Langchain::Assistant.new(
         instructions: instructions,
         llm: llm,
+	parallel_tool_calls: false,
         tools: [
           InventoryManagement.new,
           ShippingService.new,

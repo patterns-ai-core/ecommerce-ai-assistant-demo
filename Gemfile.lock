@@ -25,7 +25,7 @@ GEM
       net-http
     json-schema (4.3.1)
       addressable (>= 2.8)
-    langchainrb (0.17.1)
+    langchainrb (0.18.0)
       baran (~> 0.1.9)
       json-schema (~> 4)
       matrix
@@ -94,7 +94,7 @@ GEM
     tilt (2.4.0)
     timeout (0.4.1)
     uri (0.13.0)
-    zeitwerk (2.6.18)
+    zeitwerk (2.7.0)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -112,7 +112,7 @@ DEPENDENCIES
   anthropic
   dotenv
   faraday
-  langchainrb (= 0.17.1)
+  langchainrb (= 0.18.0)
   mail
   pry-byebug
   rack (~> 2.2)
