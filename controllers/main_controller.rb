@@ -71,10 +71,36 @@ class MainController < Sinatra::Base
     end
   end
 
-  def llm
+
+  def openai_llm
     Langchain::LLM::OpenAI.new(
       api_key: ENV["OPENAI_API_KEY"],
       default_options: { chat_completion_model_name: "gpt-4o-mini" }
     )
   end
+
+  def gemini_llm
+    Langchain::LLM::GoogleGemini.new(
+      api_key: ENV["GOOGLE_GEMINI_API_KEY"],
+      default_options: { chat_completion_model_name: "gemini-1.5-pro" }
+    )
+  end
+
+  def anthropic_llm
+    Langchain::LLM::Anthropic.new(
+      api_key: ENV["ANTHROPIC_API_KEY"],
+      default_options: { chat_completion_model_name: "claude-2" }
+    )
+  end
+
+  # Auto-choosing LLM based on ENV variables being available.
+  def llm
+    Langchain.logger.level = Logger::INFO
+
+    return openai_llm if ENV.fetch 'OPENAI_API_KEY', false
+    return gemini_llm if ENV.fetch 'GOOGLE_GEMINI_API_KEY', false
+    return anthropic_llm if ENV.fetch 'ANTHROPIC_API_KEY', false
+    raise "I need at least one key among OPENAI_API_KEY, GOOGLE_GEMINI_API_KEY, and ANTHROPIC_API_KEY"
+  end
+
 end
