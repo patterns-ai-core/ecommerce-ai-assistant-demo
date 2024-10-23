@@ -74,7 +74,7 @@ class MainController < Sinatra::Base
   def llm
     Langchain::LLM::OpenAI.new(
       api_key: ENV["OPENAI_API_KEY"],
-      default_options: { chat_completion_model_name: "gpt-4o-mini" }
+      default_options: { chat_model: "gpt-4o-mini" }
     )
   end
 end
